@@ -31,6 +31,9 @@ install_arm_tool_chain(){
 tee /etc/profile.d/arm-toolchain.sh
 	
 	chmod +x /etc/profile.d/arm-toolchain.sh
+	test -d /usr/local/man/man1 || mkdir /usr/local/man1
+	cp /opt/arm/arm-2013.11/share/doc/arm-arm-none-eabi/man/man1/*\
+/usr/local/man/man1/
 } 
 
 install_openOCD(){
