@@ -1,18 +1,18 @@
 #!/bin/bash
 tmp=tmp
 ARMTCPkg='arm-2013.11-24-arm-none-eabi-i686-pc-linux-gnu.tar.bz2'
-ARMToolChain='https://sourcery.mentor.com/public/gnu_toolchain/arm-none-eabi/'\
-$ARMTCPkg
+ARMToolChain='https://sourcery.mentor.com/public/gnu_toolchain/'\
+'arm-none-eabi/'$ARMTCPkg
 
 OpenOCDPkg='openocd-0.7.0.tar.bz2'
-OpenOCD='http://sourceforge.net/projects/openocd/files/openocd/0.7.0/'\
-$OpenOCDPkg
+OpenOCD='http://sourceforge.net/projects/openocd/files/'\
+'openocd/0.7.0/'$OpenOCDPkg
 
 StLinkSrc='https://github.com/texane/stlink.git'
 
 EclipsePkg='eclipse-standard-kepler-SR1-linux-gtk-x86_64.tar.gz'
-EclipseKeplerSrc='http://www.gtlib.gatech.edu/pub/eclipse/technology/epp/'\
-'downloads/release/kepler/SR1/'$EclipsePkg
+EclipseKeplerSrc='http://www.gtlib.gatech.edu/pub/eclipse/'\
+'technology/epp/downloads/release/kepler/SR1/'$EclipsePkg
 
 install_arm_tool_chain(){
 	test -d temp || mkdir tmp
@@ -31,9 +31,10 @@ install_arm_tool_chain(){
 tee /etc/profile.d/arm-toolchain.sh
 	
 	chmod +x /etc/profile.d/arm-toolchain.sh
-	test -d /usr/local/man/man1 || mkdir /usr/local/man1
-	cp /opt/arm/arm-2013.11/share/doc/arm-arm-none-eabi/man/man1/*\
-/usr/local/man/man1/
+	for i in /opt/arm/arm-2013.11/share/doc/arm-arm-none-eabi/man/man1/*;
+	do
+		install -D $i /usr/local/share/man/man1/$i
+	done
 } 
 
 install_openOCD(){
@@ -95,10 +96,10 @@ case "$1" in
 *) 
 	echo 'Usage: '
 	echo 'Flags:		Description'
-	echo 'ARMToolchain:	Install the armtool chain'
+	echo 'armtoolchain:	Install the armtool chain'
 	echo 'openocd:	Install openocd'
 	echo 'stlink:		Install stlink'
-	echo 'qstlink:	Install QSTLink2'
+	echo 'qstlink2:	Install QSTLink2'
 	echo 'eclipse:	Install eclipse'
 	;;
 esac
