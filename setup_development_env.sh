@@ -20,6 +20,7 @@ install_arm_tool_chain(){
 	wget $ARMToolChain
 	if [ $? -ne 0 ]
 	then
+		echo "Could not download file";
 		exit	
 	fi
 	mkdir /opt/arm
@@ -41,10 +42,18 @@ install_openOCD(){
 	test -d tmp || mkdir tmp
 	cd $tmp
 	wget $OpenOCD
-	
+	if [ $? -ne 0 ]
+	then
+		echo "Could not download file";
+		exit
+	fi	
 	tar -xjvf $OpenOCDPkg -C /opt/arm
 	cd /opt/arm/openocd-0.7.0
 	./configure --enable-stlink
+	if [$? -ne 0]
+	then
+		echo "Error: see error"
+	fi
 	make -j4
 	make install
 }
@@ -77,6 +86,14 @@ install_eclipse(){
 	sudo chown -R `whoami`:users /opt/eclipse
 }
 
+install_devtools(){
+	sudo apt-get install apt-get install build-essential subversion
+	sudo apt-get install git htop minicom openjdk-7jdk qt4-dev-tools
+	sudo apt-get install qt4-qmake libqt4-gui qt4-designer qtcreator
+	sudo apt-get install libusb-dev libusb-1.0.0-dev autoconf
+	sudo apt-get install automake pkg-config libtool
+}
+
 case "$1" in
 "armtoolchain")
 	install_arm_tool_chain
@@ -93,6 +110,9 @@ case "$1" in
 "eclipse")
 	install_eclipse
 	;;
+"devtools")
+	install_devtools
+	;;
 *) 
 	echo 'Usage: '
 	echo 'Flags:		Description'
@@ -101,5 +121,6 @@ case "$1" in
 	echo 'stlink:		Install stlink'
 	echo 'qstlink2:	Install QSTLink2'
 	echo 'eclipse:	Install eclipse'
+	echo 'devtools:	Dev tools'
 	;;
 esac
